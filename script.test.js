@@ -1,4 +1,5 @@
-import { capitalize, reverseString, calculator } from './script.js';
+import { capitalize, reverseString, calculator, caesarCipher, analyze } 
+  from './script.js';
 
 // Capitalize Tests
 
@@ -182,4 +183,87 @@ test('throws error if undefined', () => {
 
 test('throws error if null', () => {
   expect(() => { calculator.divide(null, 5) }).toThrow('Must pass in two numbers');
+});
+
+// Caesar Cipher Tests
+
+test('encrypts string properly', () => {
+  expect(caesarCipher('success', 1)).toBe('tvddftt');
+});
+
+test('encrypts string with non-letters properly', () => {
+  expect(caesarCipher('success! nice 1', 5)).toBe('xzhhjxx! snhj 1');
+});
+
+test('maintains capitalization', () => {
+  expect(caesarCipher('SUCCESS', 1)).toBe('TVDDFTT');
+});
+
+test('accepts full sentence', () => {
+  expect(caesarCipher("What do you mean this doesn't work!? IT DOES!", 10)).toBe("Grkd ny iye wokx drsc nyocx'd gybu!? SD NYOC!");
+});
+
+test('throws error if only string', () => {
+  expect(() => { caesarCipher("Hello") }).toThrow('Must pass in a string and key');
+});
+
+test('throws error if only key', () => {
+  expect(() => { caesarCipher(5) }).toThrow('Must pass in a string and key');
+});
+
+test('throws error if string is undefined', () => {
+  expect(() => { caesarCipher(undefined, 3) }).toThrow('Must pass in a string and key');
+});
+
+test('throws error if string is null', () => {
+  expect(() => { caesarCipher(null, 4) }).toThrow('Must pass in a string and key');
+});
+
+test('throws error if key is undefined', () => {
+  expect(() => { caesarCipher("Fail", undefined) }).toThrow('Must pass in a string and key');
+});
+
+test('throws error if key is null', () => {
+  expect(() => { caesarCipher("Fail", null) }).toThrow('Must pass in a string and key');
+});
+
+// Array Analysis Tests
+
+test('returns object with avg, min, max, and length properly', () => {
+  expect(analyze([1, 8, 3, 4, 2, 6])).toMatchObject({
+    average: 4,
+    min: 1,
+    max: 8,
+    length: 6
+  })
+});
+
+test('returns object with proper analysis when array has only one value', () => {
+  expect(analyze([0])).toMatchObject({
+    average: 0,
+    min: 0,
+    max: 0,
+    length: 1
+  })
+});
+
+test('returns object using negative numbers', () => {
+  expect(analyze([-1, -3, -2])).toMatchObject({
+    average: -2,
+    min: -3,
+    max: -1,
+    length: 3
+  })
+});
+
+test('expects array to be passed in', () => {
+  expect(() => { analyze(undefined) }).toThrow('Must pass in an array');
+});
+
+test('expects array to not be empty', () => {
+  expect(() => { analyze([]) }).toThrow('Array must not be empty');
+});
+
+test('expects array to contain only numbers', () => {
+  expect(() => { analyze([1, true, '3']) }).toThrow('Must pass only numbers');
 });
